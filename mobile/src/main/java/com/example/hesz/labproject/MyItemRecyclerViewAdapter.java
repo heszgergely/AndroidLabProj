@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.hesz.labproject.QueuesFragment.OnListFragmentInteractionListener;
+import com.example.hesz.labproject.PartitionsFragment.OnListFragmentInteractionListener;
 import com.example.hesz.labproject.dummy.DummyContent.DummyItem;
 
 import java.util.List;

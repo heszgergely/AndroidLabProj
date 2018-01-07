@@ -8,14 +8,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.hesz.labproject.dummy.DummyContent;
 
-public class BottomNavigationActivity extends AppCompatActivity implements NodesFragment.OnFragmentInteractionListener, JobsFragment.OnFragmentInteractionListener, QueuesFragment.OnListFragmentInteractionListener{
+public class BottomNavigationActivity extends AppCompatActivity implements NodesFragment.OnFragmentInteractionListener, JobsFragment.OnFragmentInteractionListener, PartitionsFragment.OnListFragmentInteractionListener{
 
     private TextView mTextMessage;
 
@@ -33,11 +32,11 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_navigation_frame_container, selectedFragment).commit();
                     break;
                 case R.id.navigation_nodes:
-                    selectedFragment = NodesFragment.newInstance("param1","param1");
+                    selectedFragment = NodesFragment.newInstance(Constants.REST_SERVER_ADDRESS+Constants.NODES_ADDRESS_SUFFIX);
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_navigation_frame_container, selectedFragment).commit();
                     break;
                 case R.id.navigation_queues:
-                    selectedFragment = QueuesFragment.newInstance(4);
+                    selectedFragment = PartitionsFragment.newInstance(4);
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_navigation_frame_container, selectedFragment).commit();
                     break;
             }

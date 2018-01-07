@@ -2,7 +2,6 @@ package com.example.hesz.labproject;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,15 +13,13 @@ import android.view.ViewGroup;
 import com.example.hesz.labproject.dummy.DummyContent;
 import com.example.hesz.labproject.dummy.DummyContent.DummyItem;
 
-import java.util.List;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class QueuesFragment extends Fragment {
+public class PartitionsFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -34,13 +31,13 @@ public class QueuesFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public QueuesFragment() {
+    public PartitionsFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static QueuesFragment newInstance(int columnCount) {
-        QueuesFragment fragment = new QueuesFragment();
+    public static PartitionsFragment newInstance(int columnCount) {
+        PartitionsFragment fragment = new PartitionsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

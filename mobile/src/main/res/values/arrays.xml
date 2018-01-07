@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="labs">
+        <item>Lab1</item>
+        <item>Lab2</item>
+        <item>Lab3</item>
+        <item>Lab4</item>
+        <item>Lab5</item>
+    </string-array>
+</resources>

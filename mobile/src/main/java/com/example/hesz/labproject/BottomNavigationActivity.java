@@ -28,7 +28,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_jobs:
-                    selectedFragment =  JobsFragment.newInstance("param1","param1");
+                    selectedFragment =  JobsFragment.newInstance(Constants.REST_SERVER_ADDRESS+Constants.JOBS_ADDRESS_SUFFIX);
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_navigation_frame_container, selectedFragment).commit();
                     break;
                 case R.id.navigation_nodes:
@@ -76,7 +76,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Fragment newFragment =  JobsFragment.newInstance("param1","param1");
+        Fragment newFragment =  JobsFragment.newInstance(Constants.REST_SERVER_ADDRESS+Constants.JOBS_ADDRESS_SUFFIX);
         getSupportFragmentManager().beginTransaction().replace(R.id.bottom_navigation_frame_container, newFragment).commit();
 
     }

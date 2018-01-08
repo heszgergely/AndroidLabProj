@@ -252,7 +252,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
                     }
                 }
             });
-
             */
         }
 

@@ -191,8 +191,12 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         if (!mDownloading) {
             // Execute the async download.
             mDownloading = true;
-            mDownloadTask = new DownloadTask(this);
-            mDownloadTask.execute(url);
+
+            updateFromDownload(Content.nodes);
+
+            //TODO: uncomment for downloading the data
+            //mDownloadTask = new DownloadTask(this);
+            //mDownloadTask.execute(url);
         }
     }
 

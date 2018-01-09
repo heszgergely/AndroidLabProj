@@ -1,11 +1,14 @@
 package com.example.hesz.labproject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +49,6 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
 
     private boolean mDownloading = false;
 
-    private TextView downloadTextView;
     private RecyclerView recyclerView;
 
     private MyItemRecyclerViewAdapter adapter;
@@ -87,7 +89,6 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nodes, container, false);
-        downloadTextView = view.findViewById(R.id.nodes_text_view);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.setTitle(R.string.title_nodes);
@@ -124,12 +125,13 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        startDownload();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startDownload();
     }
 
     @Override
@@ -139,16 +141,30 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         mListener = null;
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void updateFromDownload(String result) {
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            downloadTextView.setText(result);
-            adapter.swapValues(NodeItem.parseNodesFromJSON(jsonArray));
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            new AsyncTask<String,Void,List<NodeItem>>(){
+
+                @Override
+                protected List doInBackground(String... result) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(result[0]);
+                        return NodeItem.parseNodesFromJSON(jsonArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(List<NodeItem> newValues){
+                    adapter.swapValues(newValues);
+                }
+            }.execute(result);
+
+
     }
 
     @Override
@@ -243,15 +259,21 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         @Override
         public com.example.hesz.labproject.NodesFragment.MyItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_item, parent, false);
+                    .inflate(R.layout.listitem_nodes, parent, false);
             return new com.example.hesz.labproject.NodesFragment.MyItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final com.example.hesz.labproject.NodesFragment.MyItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).nodeName);
-            holder.mContentView.setText(mValues.get(position).partitionName);
+            holder.mTVnodelist.setText(mValues.get(position).nodeName);
+            holder.mTVnodes.setText("" + mValues.get(position).nodeNumber);
+            holder.mTVpartition.setText(mValues.get(position).partitionName);
+            holder.mTVstate.setText(mValues.get(position).state);
+            holder.mTVcpus.setText(""+mValues.get(position).cpuNumber);
+            holder.mTVmemory.setText(""+mValues.get(position).memory);
+            holder.mTVtmpdisk.setText(""+mValues.get(position).tmpDisk);
+            holder.mTVweight.setText(""+mValues.get(position).weight);
         }
 
         @Override
@@ -261,20 +283,44 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mTVnodelist;
+            public final TextView mTVnodes;
+            public final TextView mTVpartition;
+            public final TextView mTVstate;
+            public final TextView mTVcpus;
+            public final TextView mTVmemory;
+            public final TextView mTVtmpdisk;
+            public final TextView mTVweight;
             public NodeItem mItem;
+
+
+                /*
+    "nodelist":"adev[0-1]",
+    "nodes":"2",
+    "partition":"debug",
+    "state":"idle",
+    "cpus":"2",
+    "memory":"3448",
+    "tmpdisk":"38536",
+    "weight":"16"
+    */
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTVnodelist = (TextView) view.findViewById(R.id.nodelist);
+                mTVnodes = (TextView) view.findViewById(R.id.nodes);
+                mTVpartition = (TextView) view.findViewById(R.id.partition);
+                mTVstate = (TextView) view.findViewById(R.id.state);
+                mTVcpus = (TextView) view.findViewById(R.id.cpus);
+                mTVmemory = (TextView) view.findViewById(R.id.memory);
+                mTVtmpdisk = (TextView) view.findViewById(R.id.tmpdisk);
+                mTVweight = (TextView) view.findViewById(R.id.weight);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTVnodelist.getText() + "'";
             }
         }
 

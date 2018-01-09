@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:contentPadding="@dimen/appbar_padding_top">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/main_info"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/jobid_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ID: "
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/jobid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/jobid_text"
+                    android:text="345786"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/partition_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/jobid_text"
+                    android:text="Partition: "
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/partition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/jobid_text"
+                    android:layout_toRightOf="@id/partition_text"
+                    android:text="debug"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/separating_line"
+            android:orientation="vertical"
+            android:layout_width="2dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/main_info"
+            android:background="@color/secondaryLightColor"
+            android:layout_height="80dp"/>
+
+        <RelativeLayout
+            android:id="@+id/description_info"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/separating_line"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name: " />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/name_text"
+                android:text="Job 1 name" />
+
+            <TextView
+                android:id="@+id/user_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name_text"
+                android:text="User: " />
+
+            <TextView
+                android:id="@+id/user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name_text"
+                android:layout_toRightOf="@id/user_text"
+                android:text="user 1" />
+
+
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_text"
+                android:text="Time: " />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_text"
+                android:layout_toRightOf="@id/time_text"
+                android:text="1-20:51:21" />
+
+            <TextView
+                android:id="@+id/nodelist_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_text"
+                android:text="Nodelist: " />
+
+            <TextView
+                android:id="@+id/nodelist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_text"
+                android:layout_toRightOf="@id/nodelist_text"
+                android:text="adev0" />
+
+
+        </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="running"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+
+
+<!--
+
+    "jobid":"3456",
+    "partition":"debug",
+    "name":"Job 1 name",
+    "user":"user 1",
+    "status":"running",
+    "time":"1-20:51:21",
+    "nodes":"1",
+    "nodelist":"adev0"
+
+-->

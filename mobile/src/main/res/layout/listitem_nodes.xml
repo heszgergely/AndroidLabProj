@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/image_state"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:tint="@color/primaryLightColor"
+            app:srcCompat="@drawable/ic_devices_black_24dp" />
+
+        <TextView
+            android:id="@+id/state"
+            android:text="allocated"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"/>
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/nodelist"
+        android:padding="10dp"
+        android:layout_width="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/image_state"
+        android:layout_toRightOf="@+id/image_state"
+        android:text="adev[0-1]"
+        android:textSize="18sp" />
+
+
+    <RelativeLayout
+        android:id="@+id/details_first"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_toEndOf="@+id/nodelist"
+        android:layout_toRightOf="@+id/nodelist"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/partition_text"
+            android:text="Partition: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/partition"
+            android:text="debug"
+            android:layout_toEndOf="@+id/partition_text"
+            android:layout_toRightOf="@+id/partition_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nodes_text"
+            android:text="Nr. of Nodes: "
+            android:layout_below="@+id/partition_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/nodes"
+            android:text="2"
+            android:layout_below="@+id/partition_text"
+            android:layout_toEndOf="@+id/nodes_text"
+            android:layout_toRightOf="@+id/nodes_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/cpus_text"
+            android:text="Nr. of CPUs: "
+            android:layout_below="@+id/nodes_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/cpus"
+            android:text="2"
+            android:layout_below="@+id/nodes_text"
+            android:layout_toEndOf="@+id/cpus_text"
+            android:layout_toRightOf="@+id/cpus_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/memory_text"
+            android:text="Memory Limit: "
+            android:layout_below="@+id/cpus_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/memory"
+            android:text="3448"
+            android:layout_below="@+id/cpus_text"
+            android:layout_toEndOf="@+id/memory_text"
+            android:layout_toRightOf="@+id/memory_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tmpdisk_text"
+            android:text="DiskSpace: "
+            android:layout_below="@+id/memory_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tmpdisk"
+            android:text="38536"
+            android:layout_toEndOf="@+id/tmpdisk_text"
+            android:layout_toRightOf="@+id/tmpdisk_text"
+            android:layout_below="@+id/memory_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/weight_text"
+            android:text="Weight: "
+            android:layout_below="@+id/tmpdisk_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/weight"
+            android:text="16"
+            android:layout_toEndOf="@+id/weight_text"
+            android:layout_toRightOf="@+id/weight_text"
+            android:layout_below="@+id/tmpdisk_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/container"
+        android:background="@color/secondaryLightColor"/>
+
+
+
+
+</RelativeLayout>
+
+<!--
+    "nodelist":"adev[0-1]",
+    "nodes":"2",
+    "partition":"debug",
+    "state":"idle",
+    "cpus":"2",
+    "memory":"3448",
+    "tmpdisk":"38536",
+    "weight":"16"
+-->

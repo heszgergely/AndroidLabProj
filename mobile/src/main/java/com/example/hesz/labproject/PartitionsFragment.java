@@ -1,9 +1,11 @@
 package com.example.hesz.labproject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,7 +40,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
 
     private boolean mDownloading = false;
 
-    private TextView downloadTextView;
     private RecyclerView recyclerView;
 
     private PartitionsFragment.MyItemRecyclerViewAdapter adapter;
@@ -79,7 +80,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_partitions, container, false);
-        downloadTextView = view.findViewById(R.id.partitions_text_view);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.setTitle(R.string.title_partitions);
@@ -117,12 +117,13 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        startDownload();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startDownload();
     }
 
     @Override
@@ -132,17 +133,45 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
         mListener = null;
     }
 
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void updateFromDownload(String result) {
+
+        new AsyncTask<String,Void,List<PartitionItem>>(){
+
+            @Override
+            protected List doInBackground(String... result) {
+                try {
+                    JSONArray jsonArray = new JSONArray(result[0]);
+                    return PartitionItem.parsePartitionsFromJSON(jsonArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<PartitionItem> newValues){
+                adapter.swapValues(newValues);
+            }
+        }.execute(result);
+
+
+    }
+
+    /*
     @Override
     public void updateFromDownload(String result) {
         try {
             JSONArray jsonArray = new JSONArray(result);
-            downloadTextView.setText(result);
             adapter.swapValues(PartitionItem.parsePartitionsFromJSON(jsonArray));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    */
 
     @Override
     public NetworkInfo getActiveNetworkInfo() {

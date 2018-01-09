@@ -75,15 +75,25 @@ public class JobContentFragment extends Fragment {
         @Override
         public com.example.hesz.labproject.JobContentFragment.MyItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_item, parent, false);
+                    .inflate(R.layout.listitem_job, parent, false);
             return new com.example.hesz.labproject.JobContentFragment.MyItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final com.example.hesz.labproject.JobContentFragment.MyItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).jobName);
-            holder.mContentView.setText(mValues.get(position).status);
+            holder.mTVjobid.setText(""+mValues.get(position).jobId);
+            holder.mTVpartition.setText(mValues.get(position).partitionName);
+            holder.mTVname.setText(mValues.get(position).jobName);
+            holder.mTVuser.setText(mValues.get(position).submittingUser);
+            holder.mTVstatus.setText(mValues.get(position).status);
+            holder.mTVtime.setText(mValues.get(position).time);
+            holder.mTVnodelist.setText(mValues.get(position).nodelist);
+            if(mValues.get(position).status.equals("running"))
+                holder.mTVstatus.setTextColor(getResources().getColor(R.color.secondaryLightColor));
+            if(mValues.get(position).status.equals("completed"))
+                holder.mTVstatus.setTextColor(getResources().getColor(R.color.primaryLightColor));
+
         }
 
         @Override
@@ -93,20 +103,30 @@ public class JobContentFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mTVjobid;
+            public final TextView mTVpartition;
+            public final TextView mTVname;
+            public final TextView mTVuser;
+            public final TextView mTVstatus;
+            public final TextView mTVtime;
+            public final TextView mTVnodelist;
             public JobItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTVjobid = (TextView) view.findViewById(R.id.jobid);
+                mTVpartition = (TextView) view.findViewById(R.id.partition);
+                mTVname = (TextView) view.findViewById(R.id.name);
+                mTVuser = (TextView) view.findViewById(R.id.user);
+                mTVstatus = (TextView) view.findViewById(R.id.status);
+                mTVtime = (TextView) view.findViewById(R.id.time);
+                mTVnodelist = (TextView) view.findViewById(R.id.nodelist);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTVname.getText() + "'";
             }
         }
     }

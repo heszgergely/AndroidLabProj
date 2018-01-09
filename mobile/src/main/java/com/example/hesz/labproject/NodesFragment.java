@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,7 +88,10 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nodes, container, false);
         downloadTextView = view.findViewById(R.id.nodes_text_view);
-
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setTitle(R.string.title_nodes);
+        }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
 

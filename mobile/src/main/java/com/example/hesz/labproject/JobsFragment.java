@@ -1,19 +1,32 @@
 package com.example.hesz.labproject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,15 +37,31 @@ import android.widget.TextView;
  * Use the {@link JobsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class JobsFragment extends Fragment implements DownloadCallback<String> {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+
+    private static final String TAG = "JobsFragment";
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String URL = "url_param";
+
+    // TODO: Rename and change types of parameters
+    private String url;
+
+
+    //private DownloadCallback mCallback;
+    private DownloadTask mDownloadTask;
+
+    private boolean mDownloading = false;
+
+    private List<JobItem> allJobsList = new ArrayList<>();
+    private List<JobItem> runningJobsList = new ArrayList<>();
+    private List<JobItem> completedJobsList= new ArrayList<>();
+    private List<JobItem> otherJobsList = new ArrayList<>();
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
 
 
     /**
@@ -62,15 +91,13 @@ public class JobsFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment JobsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JobsFragment newInstance(String param1, String param2) {
+    public static JobsFragment newInstance(String param1) {
         JobsFragment fragment = new JobsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(URL, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,13 +106,12 @@ public class JobsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getString(URL);
 
         }
 
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the four
         // primary sections of the activity.
         mSectionsPagerAdapter = new JobsFragment.SectionsPagerAdapter(getChildFragmentManager());
 
@@ -98,6 +124,10 @@ public class JobsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_jobs, container, false);
 
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setTitle(R.string.title_jobs);
+        }
 
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -132,10 +162,129 @@ public class JobsFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startDownload();
+    }
+
+    private void startDownload() {
+        if (!mDownloading) {
+            // Execute the async download.
+            mDownloading = true;
+
+            updateFromDownload(Content.jobs);
+
+            //TODO: uncomment for downloading the data
+            //mDownloadTask = new DownloadTask(this);
+            //mDownloadTask.execute(url);
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
+        finishDownloading();
         mListener = null;
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void updateFromDownload(String result) {
+        try {
+            JSONArray jsonArray = new JSONArray(result);
+            new AsyncTask<JSONArray,Void,Void>(){
+
+                @Override
+                protected Void doInBackground(JSONArray... values) {
+                    try {
+                        List<JobItem> jobList = JobItem.parseJobsFromJSON(values[0]);
+                        clearAllLists();
+                        for(JobItem job: jobList){
+                            allJobsList.add(job);
+                            switch (job.status){
+                                case "running":
+                                    runningJobsList.add(job);
+                                    break;
+                                case "completed":
+                                    completedJobsList.add(job);
+                                    break;
+                                default:
+                                    otherJobsList.add(job);
+                                    break;
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    notifyFragmentsOfListChanges();
+                }
+
+
+            }.execute(jsonArray);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearAllLists() {
+        allJobsList.clear();
+        completedJobsList.clear();
+        otherJobsList.clear();
+        runningJobsList.clear();
+    }
+
+    private void notifyFragmentsOfListChanges(){
+        for( Fragment fragment : getChildFragmentManager().getFragments()) {
+            JobContentFragment job_fragment = ((JobContentFragment) fragment);
+            job_fragment.notifyDatasetChanged();
+        }
+    }
+
+
+    @Override
+    public NetworkInfo getActiveNetworkInfo() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo;    }
+
+    @Override
+    public void onProgressUpdate(int progressCode, int percentComplete) {
+
+        switch(progressCode) {
+            //TODO:Make this useful
+            // You can add UI behavior for progress updates here.
+            case Progress.ERROR:
+                Log.d(TAG,"Error progress update");
+                break;
+            case Progress.CONNECT_SUCCESS:
+                Log.d(TAG,"Succesful connection!");
+                break;
+            case Progress.GET_INPUT_STREAM_SUCCESS:
+                Log.d(TAG,"Input stream successfully read");
+                break;
+            case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
+                Log.d(TAG,"Processing input stream...");
+                break;
+            case Progress.PROCESS_INPUT_STREAM_SUCCESS:
+                Log.d(TAG,"Input stream succesfully processed!");
+                break;
+        }
+    }
+
+    @Override
+    public void finishDownloading() {
+        if (mDownloadTask != null) {
+            mDownloadTask.cancel(true);
+        }
     }
 
     /**
@@ -154,11 +303,15 @@ public class JobsFragment extends Fragment {
     }
 
 
+
+
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -167,14 +320,28 @@ public class JobsFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return JobsFragment.PlaceholderFragment.newInstance(position + 1);
+            // Return a JobContentFragment (defined as a static inner class below).
+            //JobContentFragment JCF = JobContentFragment.newInstance(position);
+
+            switch (position) {
+                case 0:
+                    return allJobsFragment.newInstance(position,allJobsList);
+                case 1:
+                    return runningJobsFragment.newInstance(position,runningJobsList);
+                case 2:
+                    return completedJobsFragment.newInstance(position,completedJobsList);
+                case 3:
+                    return otherJobsFragment.newInstance(position,otherJobsList);
+            }
+
+            return null;
         }
+
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 4 total pages.
+            return 4;
         }
 
         @Override
@@ -187,7 +354,7 @@ public class JobsFragment extends Fragment {
                 case 2:
                     return "Completed";
                 case 3:
-                    return "Other";
+                    return "Others";
             }
 
             return null;
@@ -195,38 +362,46 @@ public class JobsFragment extends Fragment {
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    public static class allJobsFragment extends JobContentFragment{
+        public allJobsFragment() {
 
-        public PlaceholderFragment() {
         }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static TabbedActivity.PlaceholderFragment newInstance(int sectionNumber) {
-            TabbedActivity.PlaceholderFragment fragment = new TabbedActivity.PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+        public static allJobsFragment newInstance(int sectionNumber, List itemsList) {
+            allJobsFragment fragment = new allJobsFragment();
+            fragment.setList(itemsList);
             return fragment;
         }
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tabbed, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+    public static class runningJobsFragment extends JobContentFragment{
+        public runningJobsFragment() {
+
+        }
+        public static runningJobsFragment newInstance(int sectionNumber, List itemsList) {
+            runningJobsFragment fragment = new runningJobsFragment();
+            fragment.setList(itemsList);
+            return fragment;
         }
     }
+
+    public static class completedJobsFragment extends JobContentFragment{
+        public completedJobsFragment() {
+    }
+        public static completedJobsFragment newInstance(int sectionNumber, List itemsList) {
+            completedJobsFragment fragment = new completedJobsFragment();
+            fragment.setList(itemsList);
+            return fragment;
+        }
+    }
+
+    public static class otherJobsFragment extends JobContentFragment{
+        public otherJobsFragment() {
+    }
+        public static otherJobsFragment newInstance(int sectionNumber, List itemsList) {
+            otherJobsFragment fragment = new otherJobsFragment();
+            fragment.setList(itemsList);
+            return fragment;
+        }
+    }
+
 }

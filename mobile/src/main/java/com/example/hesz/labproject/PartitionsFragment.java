@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +80,10 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_partitions, container, false);
         downloadTextView = view.findViewById(R.id.partitions_text_view);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setTitle(R.string.title_partitions);
+        }
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);

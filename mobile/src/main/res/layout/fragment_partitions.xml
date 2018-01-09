@@ -40,7 +40,7 @@
 
 <android.support.v7.widget.RecyclerView
     android:id="@+id/list"
-    android:name="com.example.hesz.labproject.QueuesFragment"
+    android:name="com.example.hesz.labproject.PartitionsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"

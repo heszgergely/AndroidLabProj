@@ -3,7 +3,7 @@
     <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
     <string name="title_jobs">Jobs</string>
     <string name="title_nodes">Nodes</string>
-    <string name="title_queues">Queues</string>
+    <string name="title_partitions">Partitions</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="action_settings">Settings</string>

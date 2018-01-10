@@ -126,6 +126,8 @@ public class DownloadTask extends AsyncTask<String, Integer, DownloadTask.Result
             connection.setConnectTimeout(3000);
             // For this use case, set HTTP method to GET.
             connection.setRequestMethod("GET");
+            connection.addRequestProperty("Username:","user");
+            connection.addRequestProperty("Password:","password");
             // Already true by default but setting just in case; needs to be true since this request
             // is carrying an input (response) body.
             connection.setDoInput(true);

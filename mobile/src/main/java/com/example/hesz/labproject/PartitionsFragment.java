@@ -31,7 +31,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String URL = "url_param";
 
-    // TODO: Rename and change types of parameters
     private String url;
 
 
@@ -58,7 +57,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
      * @param param1 Parameter 1.
      * @return A new instance of fragment PartitionsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PartitionsFragment newInstance(String param1) {
         PartitionsFragment fragment = new PartitionsFragment();
         Bundle args = new Bundle();
@@ -92,11 +90,14 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
         // Set the adapter
         if (recyclerView instanceof RecyclerView) {
             Context context = view.getContext();
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             adapter = new PartitionsFragment.MyItemRecyclerViewAdapter(new ArrayList<PartitionItem>());
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(adapter);
 
         }
+
+        startDownload();
+
 
         return view;
     }
@@ -117,7 +118,6 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        startDownload();
 
     }
 
@@ -136,6 +136,7 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
     @SuppressLint("StaticFieldLeak")
     @Override
     public void updateFromDownload(String result) {
+        Log.d(TAG, "update from dowmload, download finished: "+result);
 
         new AsyncTask<String,Void,List<PartitionItem>>(){
 
@@ -155,23 +156,9 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
                 adapter.swapValues(newValues);
             }
         }.execute(result);
-
-
     }
 
-    /*
-    @Override
-    public void updateFromDownload(String result) {
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            adapter.swapValues(PartitionItem.parsePartitionsFromJSON(jsonArray));
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    */
 
     @Override
     public NetworkInfo getActiveNetworkInfo() {
@@ -215,15 +202,16 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
     }
 
     private void startDownload() {
+        Log.d(TAG,"starting download");
         if (!mDownloading) {
             // Execute the async download.
             mDownloading = true;
 
-            updateFromDownload(Content.partitions);
+            //updateFromDownload(Content.partitions);
 
             //TODO: uncomment for downloading the data
-            //mDownloadTask = new DownloadTask(this);
-            //mDownloadTask.execute(url);
+            mDownloadTask = new DownloadTask(this);
+            mDownloadTask.execute(url);
         }
     }
 
@@ -252,6 +240,7 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
         private final List<PartitionItem> mValues;
 
         public MyItemRecyclerViewAdapter(List<PartitionItem> items) {
+            Log.d(TAG,"MyItemRecyclerViewAdapter created");
             mValues = items;
         }
 
@@ -265,15 +254,18 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
         @Override
         public com.example.hesz.labproject.PartitionsFragment.MyItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_item, parent, false);
+                    .inflate(R.layout.listitem_partition, parent, false);
             return new com.example.hesz.labproject.PartitionsFragment.MyItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final com.example.hesz.labproject.PartitionsFragment.MyItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).partitionName);
-            holder.mContentView.setText(mValues.get(position).nodelist);
+            holder.mTVpartition.setText(mValues.get(position).partitionName);
+            holder.mTVavail.setText(mValues.get(position).availability);
+            holder.mTVtimelimit.setText(mValues.get(position).timelimit);
+            holder.mTVnodes.setText(mValues.get(position).nodeStates);
+            holder.mTVnodelist.setText(mValues.get(position).nodelist);
 
 
             /*
@@ -290,6 +282,16 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
             */
         }
 
+        /*
+ {
+      "partition":"batch",
+      "avail":"up",
+      "timelimit":"infinite",
+      "nodes":"2\/6\/0\/8",
+      "nodelist":"adev[8-15]"
+   },
+    */
+
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -297,20 +299,26 @@ public class PartitionsFragment extends Fragment implements DownloadCallback<Str
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mTVpartition;
+            public final TextView mTVavail;
+            public final TextView mTVtimelimit;
+            public final TextView mTVnodes;
+            public final TextView mTVnodelist;
             public PartitionItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTVpartition = (TextView) view.findViewById(R.id.partition);
+                mTVavail = (TextView) view.findViewById(R.id.avail);
+                mTVtimelimit = (TextView) view.findViewById(R.id.timelimit);
+                mTVnodes = (TextView) view.findViewById(R.id.nodes);
+                mTVnodelist = (TextView) view.findViewById(R.id.nodelist);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTVpartition.getText() + "'";
             }
         }
 

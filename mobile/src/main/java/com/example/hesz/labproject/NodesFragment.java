@@ -8,16 +8,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,10 +100,11 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         if (recyclerView instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new MyItemRecyclerViewAdapter(new ArrayList<NodeItem>());
             recyclerView.setAdapter(adapter);
 
         }
+        startDownload();
+
 
         return view;
     }
@@ -119,13 +119,14 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        adapter = new MyItemRecyclerViewAdapter(new ArrayList<NodeItem>());
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        startDownload();
 
     }
 
@@ -213,11 +214,11 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
             // Execute the async download.
             mDownloading = true;
 
-            updateFromDownload(Content.nodes);
+            //updateFromDownload(Content.nodes);
 
             //TODO: uncomment for downloading the data
-            //mDownloadTask = new DownloadTask(this);
-            //mDownloadTask.execute(url);
+            mDownloadTask = new DownloadTask(this);
+            mDownloadTask.execute(url);
         }
     }
 

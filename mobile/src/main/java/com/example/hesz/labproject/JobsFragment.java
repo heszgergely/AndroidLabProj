@@ -13,19 +13,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -51,6 +50,8 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
     //private DownloadCallback mCallback;
     private DownloadTask mDownloadTask;
+
+    private static DataBaseHelper db;
 
     private boolean mDownloading = false;
 
@@ -106,9 +107,11 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(URL);
+            url = getArguments().getString(URL);
 
         }
+        db = new DataBaseHelper(this.getContext());
+
 
 
         // Create the adapter that will return a fragment for each of the four
@@ -138,6 +141,7 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
         tabLayout.setupWithViewPager(mViewPager);
 
+        startDownload();
 
 
         return view;
@@ -166,7 +170,6 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
     @Override
     public void onResume() {
         super.onResume();
-        startDownload();
     }
 
     private void startDownload() {
@@ -174,11 +177,11 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
             // Execute the async download.
             mDownloading = true;
 
-            updateFromDownload(Content.jobs);
+            //updateFromDownload(Content.jobs);
 
             //TODO: uncomment for downloading the data
-            //mDownloadTask = new DownloadTask(this);
-            //mDownloadTask.execute(url);
+            mDownloadTask = new DownloadTask(this);
+            mDownloadTask.execute(url);
         }
     }
 
@@ -193,6 +196,7 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
     @Override
     public void updateFromDownload(String result) {
         try {
+            Log.d(TAG,result);
             JSONArray jsonArray = new JSONArray(result);
             new AsyncTask<JSONArray,Void,Void>(){
 
@@ -214,6 +218,9 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
                                     otherJobsList.add(job);
                                     break;
                             }
+
+
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -224,6 +231,7 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
                 @Override
                 protected void onPostExecute(Void result) {
                     notifyFragmentsOfListChanges();
+                    compareToDatabase();
                 }
 
 
@@ -232,6 +240,58 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void compareToDatabase() {
+        new AsyncTask<Void,String,Void>(){
+            LinkedList<JobItem> jobsFromDataBase;
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                jobsFromDataBase = db.getALlJobs();
+                for(JobItem downloadedJob: allJobsList){
+                    boolean found = false;
+                    for(JobItem dbJob: jobsFromDataBase){
+                        if(downloadedJob.jobId==dbJob.jobId){
+                            found = true;
+                            if(!downloadedJob.status.equals(dbJob.status)) {
+                                publishProgress("Job " + downloadedJob.jobId +
+                                        " changed from "+dbJob.status+" to "+downloadedJob.status);
+                            }
+                            db.modifyJob(downloadedJob);
+
+                        }
+                    }
+                    if(!found){
+                        db.createJob(downloadedJob);
+                        publishProgress("New Job " + downloadedJob.jobId +
+                                " with "+downloadedJob.status+" status");
+                    }
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+                makeToast(values[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                //makeToast("End of processing");
+            }
+
+        }.execute();
+
+    }
+
+
+    private void makeToast(String message){
+        Toast.makeText(getActivity(), message,
+                Toast.LENGTH_LONG).show();
+
     }
 
     private void clearAllLists() {

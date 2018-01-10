@@ -1,11 +1,11 @@
 package com.example.hesz.labproject;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,10 +89,12 @@ public class JobContentFragment extends Fragment {
             holder.mTVstatus.setText(mValues.get(position).status);
             holder.mTVtime.setText(mValues.get(position).time);
             holder.mTVnodelist.setText(mValues.get(position).nodelist);
-            if(mValues.get(position).status.equals("running"))
+            if(holder.mItem.status.equals("running"))
                 holder.mTVstatus.setTextColor(getResources().getColor(R.color.secondaryLightColor));
-            if(mValues.get(position).status.equals("completed"))
+            else if(holder.mItem.status.equals("completed"))
                 holder.mTVstatus.setTextColor(getResources().getColor(R.color.primaryLightColor));
+            else
+                holder.mTVstatus.setTextColor(Color.GRAY);
 
         }
 

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/image_state"
+            android:padding="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:tint="@color/primaryLightColor"
+                app:srcCompat="@drawable/ic_format_list_numbered_black_24dp" />
+
+            <TextView
+                android:id="@+id/avail"
+                android:text="up"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView"/>
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/partition"
+            android:padding="10dp"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/image_state"
+            android:layout_toRightOf="@+id/image_state"
+            android:text="batch"
+            android:textSize="18sp" />
+
+
+        <RelativeLayout
+            android:id="@+id/details_first"
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:layout_toEndOf="@+id/partition"
+            android:layout_toRightOf="@+id/partition"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/timelimit_text"
+                android:text="Timelimit: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/timelimit"
+                android:text="debug"
+                android:layout_toEndOf="@+id/timelimit_text"
+                android:layout_toRightOf="@+id/timelimit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nodes_text"
+                android:text="Nr. of Nodes: "
+                android:layout_below="@+id/timelimit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/nodes"
+                android:text="2"
+                android:layout_below="@+id/timelimit_text"
+                android:layout_toEndOf="@+id/nodes_text"
+                android:layout_toRightOf="@+id/nodes_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nodelist_text"
+                android:text="Nr. of CPUs: "
+                android:layout_below="@+id/nodes_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/nodelist"
+                android:text="2"
+                android:layout_below="@+id/nodes_text"
+                android:layout_toEndOf="@+id/nodelist_text"
+                android:layout_toRightOf="@+id/nodelist_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/container"
+        android:background="@color/secondaryLightColor"/>
+
+
+
+
+</RelativeLayout>
+
+    <!--
+      "partition":"batch",
+      "avail":"up",
+      "timelimit":"infinite",
+      "nodes":"2\/6\/0\/8",
+      "nodelist":"adev[8-15]"
+
+    -->

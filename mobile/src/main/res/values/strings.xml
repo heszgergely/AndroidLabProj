@@ -30,4 +30,9 @@
         completions."
     </string>
     <string name="Register">Register</string>
+
+    <string name="title_activity_new_task">NewTaskActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_new_job">NewJobActivity</string>
 </resources>

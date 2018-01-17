@@ -1,5 +1,6 @@
 package com.example.hesz.labproject;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -67,10 +68,19 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                Intent newTaskActivity = new Intent(BottomNavigationActivity.this, NewJobActivity.class);
+                //Intent registerIntent = new Intent(LoginActivity.this, testActivity.class);
+                startActivity(newTaskActivity);
+
+                /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", null).show();*/
             }
         });
+
+
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

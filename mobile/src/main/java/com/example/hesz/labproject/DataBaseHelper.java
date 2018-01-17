@@ -29,7 +29,6 @@ public class DataBaseHelper  extends SQLiteOpenHelper {
 
 
     /*
-
       "jobid":"3456",
       "partition":"debug",
       "name":"Job 1 name",
@@ -38,7 +37,6 @@ public class DataBaseHelper  extends SQLiteOpenHelper {
       "time":"1-20:51:21",
       "nodes":"1",
       "nodelist":"adev0"
-
     */
 
     //Hunting Session table names

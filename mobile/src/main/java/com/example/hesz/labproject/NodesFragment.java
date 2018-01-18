@@ -9,13 +9,18 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -56,6 +61,7 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
     private MyItemRecyclerViewAdapter adapter;
 
     private OnFragmentInteractionListener mListener;
+    private SwitchCompat myswitch;
 
 
     public NodesFragment() {
@@ -96,6 +102,8 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
             toolbar.setTitle(R.string.title_nodes);
         }
 
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
 
 
         pb = view.findViewById(R.id.progressbar);
@@ -114,6 +122,22 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
 
 
         return view;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG,"OncreateOptionsMenu");
+        inflater.inflate(R.menu.menu_tabbed, menu);
+        myswitch = menu.findItem(R.id.myswitch).getActionView().findViewById(R.id.switchForActionBar);
+        myswitch.setChecked(((BottomNavigationActivity)getActivity()).startBackgroundTask);
+        myswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ((BottomNavigationActivity)getActivity()).switchSwitched(isChecked);
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

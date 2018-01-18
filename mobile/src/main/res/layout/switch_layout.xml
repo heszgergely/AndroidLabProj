@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/switchView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text"
+        android:text="Start in Bg."/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/switchForActionBar"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/text"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+</RelativeLayout>

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -50,6 +51,8 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
     //private DownloadCallback mCallback;
     private DownloadTask mDownloadTask;
+
+    private ProgressBar pb;
 
     private static DataBaseHelper db;
 
@@ -132,6 +135,7 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
             toolbar.setTitle(R.string.title_jobs);
         }
 
+        pb = view.findViewById(R.id.progressbar);
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -230,6 +234,8 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
                 @Override
                 protected void onPostExecute(Void result) {
+                    pb.setVisibility(View.GONE);
+                    mViewPager.setVisibility(View.VISIBLE);
                     notifyFragmentsOfListChanges();
                     compareToDatabase();
                 }
@@ -321,9 +327,9 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
         switch(progressCode) {
             //TODO:Make this useful
-            // You can add UI behavior for progress updates here.
+            // You can add UI behavior for memoryBarProgress updates here.
             case Progress.ERROR:
-                Log.d(TAG,"Error progress update");
+                Log.d(TAG,"Error memoryBarProgress update");
                 break;
             case Progress.CONNECT_SUCCESS:
                 Log.d(TAG,"Succesful connection!");

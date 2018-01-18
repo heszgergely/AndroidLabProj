@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -49,6 +50,8 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
     private boolean mDownloading = false;
 
     private RecyclerView recyclerView;
+
+    private ProgressBar pb;
 
     private MyItemRecyclerViewAdapter adapter;
 
@@ -92,6 +95,10 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.setTitle(R.string.title_nodes);
         }
+
+
+
+        pb = view.findViewById(R.id.progressbar);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
 
@@ -161,6 +168,8 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
 
                 @Override
                 protected void onPostExecute(List<NodeItem> newValues){
+                    pb.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     adapter.swapValues(newValues);
                 }
             }.execute(result);
@@ -181,9 +190,9 @@ public class NodesFragment extends Fragment implements DownloadCallback<String>{
 
         switch(progressCode) {
             //TODO:Make this useful
-            // You can add UI behavior for progress updates here.
+            // You can add UI behavior for memoryBarProgress updates here.
             case Progress.ERROR:
-                Log.d(TAG,"Error progress update");
+                Log.d(TAG,"Error memoryBarProgress update");
                 break;
             case Progress.CONNECT_SUCCESS:
                 Log.d(TAG,"Succesful connection!");

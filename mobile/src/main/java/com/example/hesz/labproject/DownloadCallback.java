@@ -26,7 +26,7 @@ public interface DownloadCallback<T> {
     NetworkInfo getActiveNetworkInfo();
 
     /**
-     * Indicate to callback handler any progress update.
+     * Indicate to callback handler any memoryBarProgress update.
      * @param progressCode must be one of the constants defined in DownloadCallback.Progress.
      * @param percentComplete must be 0-100.
      */

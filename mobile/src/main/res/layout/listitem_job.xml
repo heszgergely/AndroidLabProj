@@ -112,7 +112,7 @@
 
 
             <TextView
-                android:id="@+id/time_text"
+                android:id="@+id/time_limit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_text"
@@ -123,21 +123,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_text"
-                android:layout_toRightOf="@id/time_text"
+                android:layout_toRightOf="@id/time_limit_text"
                 android:text="1-20:51:21" />
 
             <TextView
                 android:id="@+id/nodelist_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/time_text"
+                android:layout_below="@id/time_limit_text"
                 android:text="Nodelist: " />
 
             <TextView
                 android:id="@+id/nodelist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/time_text"
+                android:layout_below="@id/time_limit_text"
                 android:layout_toRightOf="@id/nodelist_text"
                 android:text="adev0" />
 

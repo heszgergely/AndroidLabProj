@@ -6,9 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.NumberPicker;
 
 /**
  * Created by hesz on 1/10/2018.
@@ -16,37 +13,37 @@ import android.widget.NumberPicker;
 
 public class InfoDialog extends DialogFragment {
 
-    NoticeDialogListener mListener;
+    InfoDialogListener mListener;
 
 
-    public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, int value);
+    public interface InfoDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog, int jobId, String action);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
+
+
+    public void setCallback(InfoDialogListener callback){
+        mListener = callback;
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_info, null);
-        builder.setView(view);
+        final int jobId = getArguments().getInt("JOB_ID",0);
+        final String action = getArguments().getString("ACTION","Cancel");
 
 
-        final NumberPicker np1 = (NumberPicker) view.findViewById(R.id.day_picker);
-        np1.setMaxValue(70); // max value 100
-        np1.setMinValue(20);   // min value 0
-        np1.setWrapSelectorWheel(false);
 
-
-        builder.setTitle("Chose sensitivity")
-                .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+        builder.setTitle(action + " job?")
+                .setMessage("Job id: " + jobId )
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogPositiveClick(InfoDialog.this, np1.getValue());
+                        mListener.onDialogPositiveClick(InfoDialog.this, jobId, action);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel dialog", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogNegativeClick(InfoDialog.this);
                     }
@@ -60,14 +57,17 @@ public class InfoDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
-        try {
+     /*   try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (NoticeDialogListener) activity;
+            mListener = (InfoDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
                     + " must implement NoticeDialogListener");
         }
+
+
+        */
     }
 
 

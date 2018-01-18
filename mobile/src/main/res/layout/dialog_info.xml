@@ -10,11 +10,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
 
-        <NumberPicker
-            android:id="@+id/day_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
         <TextView
             android:id="@+id/day_text"
             android:layout_width="wrap_content"
@@ -24,34 +19,6 @@
             android:layout_toRightOf="@+id/day_picker"
             android:text="days" />
 
-        <NumberPicker
-            android:id="@+id/hour_picker"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/day_text"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/hours_text"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/hour_picker"
-            android:layout_centerVertical="true"
-            android:layout_alignBaseline="@+id/hour_picker"
-            android:layout_height="wrap_content"
-            android:text="hours"/>
-
-        <NumberPicker
-            android:id="@+id/minute_picker"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/hours_text"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/minutes_text"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignBaseline="@+id/minute_picker"
-            android:layout_toRightOf="@+id/minute_picker"
-            android:layout_height="wrap_content"
-            android:text="minutes"/>
 
 
     </RelativeLayout>

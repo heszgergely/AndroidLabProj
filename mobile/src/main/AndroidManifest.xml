@@ -30,7 +30,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            x
         </activity>
         <activity
             android:name=".LoginActivity"

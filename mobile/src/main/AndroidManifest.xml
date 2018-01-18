@@ -40,9 +40,6 @@
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".testActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".DownloadBgService"
             android:enabled="true"

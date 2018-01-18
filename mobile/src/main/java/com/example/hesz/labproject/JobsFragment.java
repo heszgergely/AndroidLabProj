@@ -154,7 +154,6 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
         tabLayout.setupWithViewPager(mViewPager);
 
-        startDownload();
 
 
         return view;
@@ -186,6 +185,8 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
     @Override
     public void onAttach(Context context) {
+        Log.d(TAG,"OnAttach");
+
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -198,10 +199,16 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
 
     @Override
     public void onResume() {
+        Log.d(TAG,"Onresume");
+
+        startDownload();
+
         super.onResume();
     }
 
     private void startDownload() {
+        Log.d(TAG,"StartDownload");
+
         if (!mDownloading) {
             // Execute the async download.
             mDownloading = true;
@@ -271,6 +278,9 @@ public class JobsFragment extends Fragment implements DownloadCallback<String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        mDownloading = false;
+
     }
 
     @SuppressLint("StaticFieldLeak")

@@ -56,7 +56,8 @@ public class DownloadBgService extends Service {
 
             String message = msg.obj.toString();
             Intent intent = new Intent(DownloadBgService.this, BottomNavigationActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(DownloadBgService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(DownloadBgService.this, 0, intent,PendingIntent.FLAG_CANCEL_CURRENT);
 
             Notifi = new Notification.Builder(getApplicationContext())
                     .setContentTitle("LabProject")

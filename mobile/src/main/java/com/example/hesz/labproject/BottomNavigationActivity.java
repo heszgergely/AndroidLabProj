@@ -79,7 +79,8 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
             }
         });
 
-
+        Intent intent = new Intent(this,DownloadBgService.class);
+        stopService(intent);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -106,11 +107,11 @@ public class BottomNavigationActivity extends AppCompatActivity implements Nodes
         startBackgroundTask = state;
         if(state){
 
-            Intent intent = new Intent(BottomNavigationActivity.this,DownloadBgService.class);
+            Intent intent = new Intent(this,DownloadBgService.class);
             startService(intent);
         }
         else{
-            Intent intent = new Intent(BottomNavigationActivity.this,DownloadBgService.class);
+            Intent intent = new Intent(this,DownloadBgService.class);
             stopService(intent);
         }
 

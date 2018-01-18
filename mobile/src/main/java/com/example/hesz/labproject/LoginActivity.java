@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
 
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
 
+    private static final String LOGIN_URL = Constants.REST_SERVER_ADDRESS + Constants.LOGIN_ADDRESS_SUFFIX;
+
     public static final int CONNECTION_TIMEOUT=10000;
     public static final int READ_TIMEOUT=15000;
     private EditText etEmail;
@@ -54,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                //Intent registerIntent = new Intent(LoginActivity.this, testActivity.class);
                 LoginActivity.this.startActivity(registerIntent);
             }
         });
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
 
                 // Enter URL address where your php file resides
-                url = new URL("http://128.179.163.163/android_proj/login.inc.php");
+                url = new URL(LOGIN_URL);
 
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block

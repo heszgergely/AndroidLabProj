@@ -2,14 +2,12 @@ package com.example.hesz.labproject;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
-//import com.google.android.gms.common.api.Response;
 
-import java.lang.reflect.Method;
-//import java.lang.String;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
+//import com.google.android.gms.common.api.Response;
+//import java.lang.String;
 
 /**
  * Created by stella on 07/01/2018.
@@ -17,11 +15,13 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class RegisterRequest extends StringRequest {
 
-    final static private String LOGIN_SERVER_ADDRESS = "http://128.179.163.163/android_proj/UserRegister.php";
+
+    private static final String REGISTER_URL = Constants.REST_SERVER_ADDRESS + Constants.REGISTER_ADDRESS_SUFFIX;
+
     private Map<String, String> parameters;
 
     public RegisterRequest(String userID, String userEmail, String userPassword, String userLab, Response.Listener<String> listener){
-        super(Method.POST, LOGIN_SERVER_ADDRESS, listener, null);
+        super(Method.POST, REGISTER_URL, listener, null);
         parameters = new HashMap<>();
         parameters.put("userID", userID);
         parameters.put("userEmail", userEmail);

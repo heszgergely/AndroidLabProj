@@ -39,7 +39,7 @@ public class DownloadBgService extends Service {
         return START_STICKY;
     }
 
-    //서비스가 종료될 때 할 작업
+
 
     public void onDestroy() {
         thread.stopForever();
@@ -61,12 +61,17 @@ public class DownloadBgService extends Service {
             Notifi = new Notification.Builder(getApplicationContext())
                     .setContentTitle("LabProject")
                     .setContentText(message)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{0, 500, 0, 500})
                     .build();
 
+
+            Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+
             Notifi_M.notify( 777 , Notifi);
+
+
 
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             long[] vibrationPattern = {0, 500, 50, 300};

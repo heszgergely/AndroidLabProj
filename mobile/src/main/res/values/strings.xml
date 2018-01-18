@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LabProject</string>
+    <string name="app_name">DataManager</string>
     <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
     <string name="title_jobs">Jobs</string>
     <string name="title_nodes">Nodes</string>
